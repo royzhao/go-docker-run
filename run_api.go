@@ -6,8 +6,6 @@ import (
 	"github.com/codegangsta/martini"
 	"log"
 	"net/http"
-	"strconv"
-	"time"
 )
 
 // // get code steps
@@ -15,12 +13,13 @@ func Coderrunner(r *http.Request, enc Encoder, parms martini.Params) (int, strin
 	// Otherwise, return all Codes
 	id, err := getPostRun(r)
 	if err != nil {
-		return http.StatusNotFound, Must(enc.Encode(
-			NewError(ErrCodeNotExist, fmt.Sprintf("wrong input"))))
+		return http.StatusNotAcceptable, Must(enc.Encode(
+			NewError(ErrWrongInput, fmt.Sprintf("wrong input"))))
 	}
-
-	if run_map[id.Id] == nil {
-		//handler with command
+	_, ok := run_map[id.Id]
+	if ok == false {
+		go run(id)
+		log.Println("running.....")
 	}
 	return http.StatusOK, fmt.Sprintf("run id=%s is running", id.Id)
 }
@@ -34,6 +33,8 @@ func getPostRun(r *http.Request) (*Run, error) {
 		return nil, err
 	}
 	log.Println(t)
+	res2B, _ := json.Marshal(t)
+	fmt.Println(string(res2B))
 
 	if err != nil {
 		return nil, err

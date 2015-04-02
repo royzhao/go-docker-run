@@ -4,7 +4,7 @@ import (
 	"github.com/codegangsta/martini"
 	"log"
 	"net/http"
-	"os"
+	// "os"
 	"regexp"
 	"strings"
 )
@@ -102,7 +102,8 @@ func main() {
 	//
 	// go run /path/to/goroot/src/pkg/crypto/tls/generate_cert.go --host="localhost"
 	//
-	if err := http.ListenAndServe(":8001", m); err != nil {
+	log.Println("running on 4470")
+	if err := http.ListenAndServe(":4470", m); err != nil {
 		log.Fatal(err)
 	}
 

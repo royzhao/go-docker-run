@@ -1,0 +1,16 @@
+{
+	"ImportPath": "docker-run",
+	"GoVersion": "go1.4",
+	"Deps": [
+		{
+			"ImportPath": "github.com/codegangsta/inject",
+			"Comment": "v1.0-rc1-10-g33e0aa1",
+			"Rev": "33e0aa1cb7c019ccc3fbe049a8262a6403d30504"
+		},
+		{
+			"ImportPath": "github.com/codegangsta/martini",
+			"Comment": "v1.0-117-g2047b73",
+			"Rev": "2047b7394d319aa3feb49db1452202336fb66fb6"
+		}
+	]
+}

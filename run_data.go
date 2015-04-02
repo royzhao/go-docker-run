@@ -5,12 +5,12 @@ import (
 )
 
 type Code struct {
-	filename string
-	content  string
+	Filename string
+	Content  string
 }
 type Command struct {
-	cmd  string
-	args []string
+	Cmd  string
+	Args []string
 }
 type Run struct {
 	XMLName xml.Name  `json:"-" xml:"run"`
