@@ -100,6 +100,7 @@ func CleanDir(path string) error {
 	return err
 }
 func run(id *Run) {
+	var total_res = "no output\n"
 	log.Println("running" + id.Id)
 	//mkdir workspace
 	id.WorkDir = "/home/zpl/docker-run-test/" + id.Id + "/"
@@ -107,6 +108,7 @@ func run(id *Run) {
 	if err != nil {
 		log.Println("server error in create workspace")
 		log.Println(err)
+		redis_client.Set(id.Id, []byte("server error in create workspace :"+err.Error()))
 		return
 	}
 	log.Println("create dir " + id.WorkDir + " successful")
@@ -114,6 +116,7 @@ func run(id *Run) {
 	if err != nil {
 		log.Println("server error in change  workspace")
 		log.Println(err)
+		redis_client.Set(id.Id, []byte("server error in change  workspace :"+err.Error()))
 		return
 	}
 	log.Println("change dir " + id.WorkDir + " successful")
@@ -121,6 +124,7 @@ func run(id *Run) {
 	if err != nil {
 		log.Println("server error in create code file")
 		log.Println(err)
+		redis_client.Set(id.Id, []byte("server error in create code file :"+err.Error()))
 		return
 	}
 	log.Println("render code ok")
@@ -129,6 +133,7 @@ func run(id *Run) {
 		f, err := find_cmd_root(v.Cmd, id.WorkDir)
 		if err != nil {
 			log.Println("not found command " + v.Cmd)
+			redis_client.Set(id.Id, []byte("not found command "+v.Cmd))
 			return
 		}
 		res, err := run_command(f, v.Args, "")
@@ -138,10 +143,14 @@ func run(id *Run) {
 			log.Println(res)
 			log.Println(err)
 			log.Println("******************")
+			redis_client.Set(id.Id, []byte("run cmd "+v.Cmd+" error\n"+res+"\n"+err.Error()))
 			return
 		}
 		log.Println("cmd " + v.Cmd + " run result :" + res)
+		total_res += "cmd " + v.Cmd + " run result is :" + res + "\n"
 	}
+	log.Println(total_res)
+	redis_client.Set(id.Id, []byte(total_res))
 	//clean
 	err = CleanDir(id.WorkDir)
 	if err != nil {

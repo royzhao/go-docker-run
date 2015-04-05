@@ -5,17 +5,20 @@ import (
 	"log"
 	"net/http"
 	// "os"
+	"github.com/hoisie/redis"
 	"regexp"
 	"strings"
 )
 
 // 只有一个martini实例
 var m *martini.Martini
+var redis_client redis.Client
 
 //global
 var run_map map[string]Run
 
 func init() {
+	redis_client.Addr = "127.0.0.1:6379"
 	run_map = make(map[string]Run)
 	m = martini.New()
 	// Setup middleware
