@@ -18,7 +18,7 @@ var redis_client redis.Client
 var run_map map[string]Run
 
 func init() {
-	redis_client.Addr = "127.0.0.1:6379"
+	redis_client.Addr = "192.168.1.5:6379"
 	run_map = make(map[string]Run)
 	m = martini.New()
 	// Setup middleware
