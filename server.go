@@ -2,10 +2,10 @@ package main
 
 import (
 	"github.com/codegangsta/martini"
+	"github.com/hoisie/redis"
 	"log"
 	"net/http"
-	// "os"
-	"github.com/hoisie/redis"
+	"os"
 	"regexp"
 	"strings"
 )
@@ -18,7 +18,12 @@ var redis_client redis.Client
 var run_map map[string]Run
 
 func init() {
-	redis_client.Addr = "192.168.1.5:6379"
+	redis_addr := os.Getenv("REDIS_ADDR")
+	log.Println("redis addr is:" + redis_addr)
+	if redis_addr == "" {
+		redis_addr = "127.0.01:6379"
+	}
+	redis_client.Addr = redis_addr
 	run_map = make(map[string]Run)
 	m = martini.New()
 	// Setup middleware
