@@ -21,7 +21,7 @@ func Coderrunner(r *http.Request, enc Encoder, parms martini.Params) (int, strin
 		go run(id)
 		log.Println("running.....")
 	}
-	return http.StatusOK, fmt.Sprintf("run id=%s is running", id.Id)
+	return http.StatusOK, Must(enc.Encode(NewError(CommitOk, fmt.Sprintf("run id=%s is running", id.Id))))
 }
 
 // Parse the request body, load into an Code structure.

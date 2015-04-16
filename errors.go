@@ -9,6 +9,7 @@ const (
 	// Error codes
 	ErrWrongInput = 1
 	ErrRunCmd     = 2
+	CommitOk      = 3
 )
 
 // The serializable Error structure.
