@@ -10,7 +10,7 @@ type Code struct {
 }
 type Command struct {
 	Cmd  string
-	Args []string
+	Args string
 }
 type Run struct {
 	XMLName xml.Name  `json:"-" xml:"run"`

@@ -26,10 +26,10 @@ func printOutput(outs []byte) {
 	}
 }
 
-func run_command(name string, args []string, input string) (string, error) {
+func run_command(name string, args string, input string) (string, error) {
 
 	log.Println("run command" + name)
-	c := exec.Command(name, args...)
+	c := exec.Command(name, args)
 	e, err := c.StderrPipe()
 	if err != nil {
 		return "error start cmd: " + name, err
@@ -99,11 +99,12 @@ func CleanDir(path string) error {
 	err := os.RemoveAll(path)
 	return err
 }
+
 func run(id *Run) {
 	var total_res = "no output\n"
 	log.Println("running" + id.Id)
 	//mkdir workspace
-	id.WorkDir = "/home/zpl/docker-run-test/" + id.Id + "/"
+	id.WorkDir = id.WorkDir + "/" + id.Id + "/"
 	err := add_work_path(id.WorkDir)
 	if err != nil {
 		log.Println("server error in create workspace")
