@@ -101,7 +101,7 @@ func CleanDir(path string) error {
 }
 
 func run(id *Run) {
-	var total_res = "no output\n"
+	var total_res = ""
 	log.Println("running" + id.Id)
 	//mkdir workspace
 	id.WorkDir = id.WorkDir + "/" + id.Id + "/"
@@ -131,26 +131,33 @@ func run(id *Run) {
 	log.Println("render code ok")
 	//handler with command
 	for _, v := range id.Cmds {
-		f, err := find_cmd_root(v.Cmd, id.WorkDir)
-		if err != nil {
-			log.Println("not found command " + v.Cmd)
-			redis_client.Set(id.Id, []byte("not found command "+v.Cmd))
-			return
+		if v.Cmd != "" {
+			var result string
+			result = "=======begin " + "run command " + v.Cmd + " and args is " + v.Args + "======\n"
+			f, err := find_cmd_root(v.Cmd, id.WorkDir)
+			if err != nil {
+				log.Println("not found command " + v.Cmd)
+				result += "not found command " + v.Cmd + "\n"
+			} else {
+				res, err := run_command(f, v.Args, "")
+				if err != nil {
+					log.Println("==================")
+					log.Println("run cmd " + v.Cmd + " error")
+					log.Println(res)
+					log.Println(err)
+					log.Println("******************")
+					result += "******************\n"
+					result += "run cmd " + v.Cmd + " error\n" + res + "\n" + err.Error()
+				} else {
+					result += res + "\n"
+				}
+			}
+
+			result += "=========end=========\n"
+			log.Println(result)
+			total_res += result
 		}
-		res, err := run_command(f, v.Args, "")
-		if err != nil {
-			log.Println("==================")
-			log.Println("run cmd " + v.Cmd + " error")
-			log.Println(res)
-			log.Println(err)
-			log.Println("******************")
-			redis_client.Set(id.Id, []byte("run cmd "+v.Cmd+" error\n"+res+"\n"+err.Error()))
-			return
-		}
-		log.Println("cmd " + v.Cmd + " run result :" + res)
-		total_res += "cmd " + v.Cmd + " run result is :" + res + "\n"
 	}
-	log.Println(total_res)
 	redis_client.Set(id.Id, []byte(total_res))
 	//clean
 	err = CleanDir(id.WorkDir)

@@ -15,7 +15,7 @@ const (
 // The serializable Error structure.
 type Error struct {
 	XMLName xml.Name `json:"-" xml:"error"`
-	Status  int      `json:"code" xml:"code,attr"`
+	Status  int      `json:"status" xml:"status,attr"`
 	Message string   `json:"message" xml:"message"`
 }
 
