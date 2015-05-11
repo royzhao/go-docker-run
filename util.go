@@ -29,7 +29,8 @@ func printOutput(outs []byte) {
 func run_command(name string, args string, input string) (string, error) {
 
 	log.Println("run command" + name)
-	c := exec.Command(name, args)
+	argv := strings.Split(args, " ")
+	c := exec.Command(name, argv...)
 	e, err := c.StderrPipe()
 	if err != nil {
 		return "error start cmd: " + name, err
