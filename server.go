@@ -21,7 +21,7 @@ func init() {
 	redis_addr := os.Getenv("REDIS_ADDR")
 	log.Println("redis addr is:" + redis_addr)
 	if redis_addr == "" {
-		redis_addr = "redis.peilong.me:6379"
+		redis_addr = "redis.learn4me.com:6379"
 	}
 	redis_client.Addr = redis_addr
 	run_map = make(map[string]Run)
